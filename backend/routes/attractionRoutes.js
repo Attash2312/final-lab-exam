@@ -3,7 +3,8 @@ const {
   getAttractions,
   createAttraction,
   updateAttraction,
-  deleteAttraction
+  deleteAttraction,
+  getTopRatedAttractions
 } = require('../controllers/attractionController');
 
 const router = express.Router();
@@ -19,5 +20,8 @@ router.put('/:id', updateAttraction);
 
 // Delete an attraction by ID
 router.delete('/:id', deleteAttraction);
+
+// Top-rated attractions route
+router.get('/top-rated', getTopRatedAttractions);
 
 module.exports = router;

@@ -1,35 +1,55 @@
 const Visitor = require('../models/visitor');
 
-exports.registerVisitor = async (req, res) => {
+// Create a new visitor
+const createVisitor = async (req, res) => {
   try {
     const visitor = new Visitor(req.body);
-    const savedVisitor = await visitor.save();
-    res.status(201).json(savedVisitor);
+    await visitor.save();
+    res.status(201).json(visitor);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-exports.updateVisitor = async (req, res) => {
+// Get all visitors
+const getVisitors = async (req, res) => {
+  try {
+    const visitors = await Visitor.find();
+    res.status(200).json(visitors);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Update a visitor
+const updateVisitor = async (req, res) => {
   try {
     const visitor = await Visitor.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!visitor) {
-      return res.status(404).json({ error: "Visitor not found" });
+      return res.status(404).json({ error: 'Visitor not found' });
     }
-    res.json(visitor);
+    res.status(200).json(visitor);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-exports.deleteVisitor = async (req, res) => {
+// Delete a visitor
+const deleteVisitor = async (req, res) => {
   try {
     const visitor = await Visitor.findByIdAndDelete(req.params.id);
     if (!visitor) {
-      return res.status(404).json({ error: "Visitor not found" });
+      return res.status(404).json({ error: 'Visitor not found' });
     }
-    res.json({ message: "Visitor deleted successfully" });
+    res.status(200).json({ message: 'Visitor deleted successfully' });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
+};
+
+module.exports = {
+  createVisitor,
+  getVisitors,
+  updateVisitor,
+  deleteVisitor
 };
